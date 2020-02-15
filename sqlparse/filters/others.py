@@ -114,6 +114,35 @@ class SpacesAroundOperatorsFilter(object):
         SpacesAroundOperatorsFilter._process(stmt)
         return stmt
 
+class MoreNewlinesFilter(object):
+
+    def __init__(self, indent_width=2):
+        self.indent_spaces = ' ' * indent_width
+
+    @staticmethod
+    def _process(tlist, indent_spaces):
+        ttypes = (T.Keyword)
+        tidx, token = tlist.token_next_by(t=ttypes)
+        while token:
+            if token.normalized in [
+                    'FROM', 'WHERE', 'GROUP BY', 'HAVING',
+                    'INNER JOIN', 'LEFT JOIN', 'RIGHT JOIN', 'OUTER JOIN', 'JOIN', 'ON',
+                    ]:
+                tlist.insert_before(tidx, sql.Token(T.Newline, '\n'))
+                tidx += 1  # has to shift since token inserted before it
+
+            if token.normalized in ['ON', 'AND', 'OR']:
+                tlist.insert_before(tidx, sql.Token(T.Whitespace, indent_spaces))
+                tidx += 1  # has to shift since token inserted before it
+
+            # assert tlist.token_index(token) == tidx
+            tidx, token = tlist.token_next_by(t=ttypes, idx=tidx)
+
+    def process(self, stmt):
+        [self.process(sgroup) for sgroup in stmt.get_sublists()]
+        MoreNewlinesFilter._process(stmt, self.indent_spaces)
+        return stmt
+
 
 # ---------------------------
 # postprocess

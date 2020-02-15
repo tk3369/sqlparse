@@ -184,6 +184,11 @@ def build_filter_stack(stack, options):
         stack.stmtprocess.append(
             filters.RightMarginFilter(width=options['right_margin']))
 
+    if options.get('more_newlines', False):
+        stack.enable_grouping()
+        stack.stmtprocess.append(
+            filters.MoreNewlinesFilter(indent_width=options['indent_width']))
+
     # Serializer
     if options.get('output_format'):
         frmt = options['output_format']

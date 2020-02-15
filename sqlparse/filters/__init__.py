@@ -10,6 +10,7 @@ from sqlparse.filters.others import SerializerUnicode
 from sqlparse.filters.others import StripCommentsFilter
 from sqlparse.filters.others import StripWhitespaceFilter
 from sqlparse.filters.others import SpacesAroundOperatorsFilter
+from sqlparse.filters.others import MoreNewlinesFilter
 
 from sqlparse.filters.output import OutputPHPFilter
 from sqlparse.filters.output import OutputPythonFilter
@@ -27,6 +28,7 @@ __all__ = [
     'StripCommentsFilter',
     'StripWhitespaceFilter',
     'SpacesAroundOperatorsFilter',
+    'MoreNewlinesFilter',
 
     'OutputPHPFilter',
     'OutputPythonFilter',
