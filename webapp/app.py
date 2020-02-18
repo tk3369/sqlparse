@@ -8,12 +8,12 @@
 
 import sqlparse
 
-from flask import Flask, request
+from flask import Flask, request, jsonify
 app = Flask(__name__)
 
 @app.route('/format', methods = ['POST'])
 def format():
-    sql = request.form['sql']
+    sql = request.get_json()['sql']
 
     formatted_sql = sqlparse.format(sql,
         reindent=True,
@@ -26,4 +26,4 @@ def format():
         # indent_width=4,
         )
 
-    return formatted_sql.strip()
+    return jsonify({"sql": formatted_sql.strip() })
